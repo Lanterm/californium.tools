@@ -22,6 +22,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -47,10 +48,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import org.eclipse.californium.core.coap.CoAP.Code;
 import org.eclipse.californium.core.coap.MessageObserverAdapter;
 import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.core.coap.Response;
-import org.eclipse.californium.core.coap.CoAP.Code;
 import org.eclipse.californium.core.network.config.NetworkConfig;
 
 
@@ -232,7 +233,8 @@ public class GUIClient extends JPanel {
 	}
 	
 	private void populateTree(List<String> ress) {
-		Node root = new Node("Resource");
+		Node root = new Node("/");
+		Collections.sort(ress);
 		for (String res:ress) {
 			String[] parts = res.split("/");
 			Node cur = root;
@@ -245,6 +247,7 @@ public class GUIClient extends JPanel {
 		}
 		dmtRes.removeAllChildren();
 		addNodes(dmtRes,root);
+		dmtRes.setUserObject(getHost());
 		dtmRes.reload();
 		for (int i = 0; i < treRes.getRowCount(); i++) {
 			treRes.expandRow(i);
